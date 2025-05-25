@@ -1,6 +1,9 @@
 import { useAuth } from "../components/auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { logoutApi } from "../api/api";
+import { BookStack } from "./SvgStack";
+import { Link } from "react-router-dom";
+import { SearchBooks } from "./SearchBooks";
 
 export const Header = ({ onAddBook }) => {
   const { user, loading, logout } = useAuth();
@@ -31,15 +34,19 @@ export const Header = ({ onAddBook }) => {
   return (
     <header className="w-full bg-gray-100 shadow-sm">
       <div className="container mx-auto grid grid-cols-3 items-center p-4">
-        <div className="text-lg font-semibold text-gray-600">📚 MyLibrary</div>
+        <Link to="/" className="text-lg font-semibold text-gray-600 flex gap-4">
+          <BookStack className="w-8 h-8" />
+          <span>Book Shelf</span>
+        </Link>
 
         <h1 className="text-2xl font-semibold text-gray-600 text-center">
-          Book Shelf
+          A handy book library
         </h1>
 
         <div className="flex justify-end gap-4">
           {user ? (
             <>
+              <SearchBooks />
               <button
                 className="cursor-pointer px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 text-sm font-medium"
                 onClick={onAddBook}
@@ -56,7 +63,9 @@ export const Header = ({ onAddBook }) => {
               </button>
             </>
           ) : (
-            <div className="text-sm text-gray-500">Please log in</div>
+            <Link to="/login" className="text-gray-500 text-xl">
+              Login
+            </Link>
           )}
         </div>
       </div>
