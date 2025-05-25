@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <SearchProvider>
         <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
+          <BrowserRouter basename="/books">
             <App />
           </BrowserRouter>
         </QueryClientProvider>
