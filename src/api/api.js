@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "https://node-bookshelf-4loa.onrender.com";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

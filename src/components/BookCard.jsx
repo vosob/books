@@ -18,7 +18,7 @@ export const BookCard = ({ book, handleDelete }) => {
           src={
             book.image
               ? `http://localhost:8080/images/${book.image}`
-              : "/default.png"
+              : `${import.meta.env.BASE_URL}default.png`
           }
           alt={book.title}
         />

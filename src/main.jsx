@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <SearchProvider>
         <QueryClientProvider client={queryClient}>
-          <HashRouter basename="/books">
+          <HashRouter>
             <App />
           </HashRouter>
         </QueryClientProvider>
