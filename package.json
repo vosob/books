@@ -1,6 +1,7 @@
 {
-  "name": "project-name",
+  "name": "book-shelf",
   "private": true,
+  "homepage": "https://vosob.github.io/https://github.com/vosob/books/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
