@@ -1,55 +1,69 @@
-import { useState } from "react";
 import { loginApi } from "../../api/api";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useAuth } from "./AuthContext";
 
 export const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const { login } = useAuth();
+
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmitForm = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     try {
-      const response = await loginApi({ email, password });
-
+      const response = await loginApi(data);
       const token = response.data.token;
-      localStorage.setItem("token", token);
-      navigate("/books", { replace: true });
-    } catch (error) {
-      console.log(error);
-    }
+      const userData = response.data.user || response.data;
 
-    setEmail("");
-    setPassword("");
+      login(token, userData);
+      navigate("/books", { replace: true });
+      reset();
+    } catch (error) {
+      console.log("Login error:", error);
+    }
   };
 
   return (
     <div className="flex flex-col justify-center items-center pt-10">
-      <h1 className="mb-4">Login</h1>
-      <form onSubmit={handleSubmitForm} className="flex flex-col w-xs gap-4">
+      <h1 className="mb-4 text-xl font-bold">Login</h1>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col w-64 gap-4"
+      >
         <input
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          value={email}
-          className="border"
-          type="text"
+          {...register("email", { required: "Email is required" })}
+          className="border p-2"
+          type="email"
           placeholder="Enter email"
         />
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
+
         <input
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          value={password}
-          className="border"
-          type="text"
+          {...register("password", { required: "Password is required" })}
+          className="border p-2"
+          type="password"
           placeholder="Enter password"
         />
-        <button className="cursor-pointer border" type="submit">
-          Send
-        </button>
-        <NavLink to={"/register"}>or register</NavLink>
+        {errors.password && (
+          <p className="text-red-500 text-sm">{errors.password.message}</p>
+        )}
+
+        <input
+          className="cursor-pointer border p-2 bg-gray-100 hover:bg-gray-200"
+          type="submit"
+          value="Send"
+        />
+
+        <NavLink className="text-blue-500 underline text-sm" to="/register">
+          or register
+        </NavLink>
       </form>
     </div>
   );

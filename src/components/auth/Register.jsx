@@ -1,62 +1,74 @@
-import { useState } from "react";
-import {} from "../../api/api";
-import { NavLink } from "react-router-dom";
+import { registerApi } from "../../api/api";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 export const Register = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmitForm = (e) => {
-    e.preventDefault();
-    console.log("log with register comp", { name, email, password });
+  const onSubmit = async (data) => {
+    try {
+      await registerApi(data);
+      navigate("/login", { replace: true });
 
-    setName("");
-    setEmail("");
-    setPassword("");
+      reset();
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
   };
 
   return (
     <div className="flex flex-col justify-center items-center pt-10">
-      <h1 className="mb-4">Register</h1>
-      <form onSubmit={handleSubmitForm} className="flex flex-col w-xs gap-4">
+      <h1 className="mb-4 text-xl font-bold">Register</h1>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col w-64 gap-4"
+      >
         <input
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          value={name}
-          className="border"
+          {...register("name", { required: "Name is required" })}
+          className="border p-2"
           type="text"
           placeholder="Enter name"
         />
+        {errors.name && (
+          <p className="text-red-500 text-sm">{errors.name.message}</p>
+        )}
+
         <input
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          value={email}
-          className="border"
-          type="text"
+          {...register("email", { required: "Email is required" })}
+          className="border p-2"
+          type="email"
           placeholder="Enter email"
         />
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
+
         <input
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          value={password}
-          className="border"
-          type="text"
+          {...register("password", { required: "Password is required" })}
+          className="border p-2"
+          type="password"
           placeholder="Enter password"
         />
-        <button className="cursor-pointer border" type="submit">
-          Send
-        </button>
-        <NavLink to={"/login"}>or login</NavLink>
+        {errors.password && (
+          <p className="text-red-500 text-sm">{errors.password.message}</p>
+        )}
+
+        <input
+          className="cursor-pointer border p-2 bg-gray-100 hover:bg-gray-200"
+          type="submit"
+          value="Send"
+        />
+
+        <NavLink className="text-blue-500 underline text-sm" to="/login">
+          or login
+        </NavLink>
       </form>
     </div>
   );

@@ -2,7 +2,6 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
 const BASE_URL = "http://localhost:8080";
-const token = localStorage.getItem("token");
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -12,6 +11,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -26,11 +26,12 @@ export const loginApi = async (data) => {
   return await axiosInstance.post(`${BASE_URL}/auth/login`, data);
 };
 
-export const logoutApi = async (data) => {
-  return await axiosInstance.get(`${BASE_URL}/auth/logout`, data);
+export const logoutApi = async () => {
+  return await axiosInstance.get(`${BASE_URL}/auth/logout`);
 };
 
 export const getBooks = async () => {
+  const token = localStorage.getItem("token");
   if (!token) {
     throw new Error("No token");
   }
@@ -38,10 +39,6 @@ export const getBooks = async () => {
   const response = await axiosInstance.get(`${BASE_URL}/books`);
   return response.data;
 };
-
-// export const createBook = async (data) => {
-//   return await axiosInstance.post(`${BASE_URL}/books`, data);
-// };
 
 export const createBook = async (formData) => {
   return axiosInstance.post("/books", formData, {
@@ -55,7 +52,12 @@ export const deleteBook = async (data) => {
   return await axiosInstance.delete(`${BASE_URL}/books/${data}`);
 };
 
+export const getCurrentUserApi = async () => {
+  return await axiosInstance.get(`${BASE_URL}/user`);
+};
+
 export const useGetBooks = () => {
+  const token = localStorage.getItem("token");
   return useQuery({
     queryKey: ["books"],
     queryFn: () => getBooks(),
