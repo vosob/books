@@ -1,37 +1,47 @@
-export const BookCard = ({ book, handleDelete }) => {
+import defaultImage from "/default.png";
+import { renderStars } from "../helpers/createStars";
+
+export const BookCard = ({ book, onDelete }) => {
   return (
-    <li className="w-52 bg-white shadow-md rounded-xl overflow-hidden p-4 flex flex-col items-center text-center relative hover:shadow-lg transition-shadow duration-300">
+    <li className="group w-52 bg-white shadow-md hover:shadow-xl rounded-2xl overflow-hidden p-5 flex flex-col items-center text-center relative transition-all duration-300  border border-gray-100">
       <button
-        onClick={() => {
-          handleDelete(book._id);
-        }}
-        className="absolute top-2 right-2 cursor-pointer bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-gray-900 rounded-full w-7 h-7 flex items-center justify-center transition-colors duration-200 border border-gray-300"
+        onClick={() => onDelete(book._id)}
+        className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 cursor-pointer  rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200 border "
         type="button"
         aria-label="Delete book"
       >
         X
       </button>
 
-      <div className="bg-gray-100 p-2 rounded-lg mb-3 shadow-inner">
+      <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 p-3 rounded-xl mb-4 shadow-inner group-hover:shadow-md transition-shadow duration-300">
         <img
-          className="w-32 h-auto max-h-44 object-contain rounded-md"
+          className="w-32 h-44 max-h-44 object-cover rounded-lg shadow-sm"
           src={
             book.image
-              ? `http://localhost:8080/images/${book.image}`
-              : `${import.meta.env.BASE_URL}default.png`
+              ? `https://node-bookshelf-4loa.onrender.com/images/${book.image}`
+              : defaultImage
           }
           alt={book.title}
+          onError={(e) => {
+            e.target.src = defaultImage;
+          }}
         />
       </div>
 
-      <h3 className="font-bold text-lg mb-1 text-gray-800">{book.title}</h3>
-      <p className="text-sm text-gray-600 mb-1">Author: {book.author}</p>
-      <div className="flex">
-        <p className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full inline-block">
+      <h3 className="font-bold text-lg mb-2 text-gray-800 leading-tight line-clamp-2 min-h-[3.5rem] flex items-center">
+        {book.title}
+      </h3>
+
+      <p className="text-sm text-gray-600 mb-3 font-medium">by {book.author}</p>
+
+      <div className="flex items-center gap-1 mb-3">
+        {renderStars(book.rating)}
+        <span className="text-xs text-gray-500 ml-1">({book.rating})</span>
+      </div>
+
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 px-3 py-1.5 rounded-full">
+        <p className="text-xs font-semibold text-blue-700">
           Year: {String(book.year).padStart(4, "0")}
-        </p>
-        <p className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full inline-block">
-          my-rating: {book.rating}
         </p>
       </div>
     </li>
