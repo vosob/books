@@ -75,6 +75,8 @@ export const BookShelf = () => {
     );
   }
 
+  console.log(books);
+
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-7xl px-6 py-6">

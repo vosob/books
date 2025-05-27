@@ -15,6 +15,7 @@ export const AddNewBook = ({ modalIsOpen, closeModal }) => {
       year: new Date().getFullYear(),
       rating: 0,
       image: null,
+      completed: false,
     },
   });
 
@@ -31,6 +32,7 @@ export const AddNewBook = ({ modalIsOpen, closeModal }) => {
     formData.append("author", data.author.trim());
     formData.append("year", data.year.toString());
     formData.append("rating", data.rating.toString());
+    formData.append("completed", data.completed ? "true" : "false");
 
     if (data.image?.[0]) {
       formData.append("image", data.image[0]);
@@ -252,6 +254,20 @@ export const AddNewBook = ({ modalIsOpen, closeModal }) => {
             <p className="text-gray-500 text-xs mt-1">
               Optional. Supported formats: JPEG, PNG, WebP. Max size: 5MB.
             </p>
+          </div>
+
+          {/* Completed */}
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="completed"
+              {...register("completed")}
+              className="w-4 h-4 text-gray-600 bg-gray-100 border-gray-300 rounded focus:ring-gray-500 focus:ring-2"
+              disabled={isFormDisabled}
+            />
+            <label htmlFor="completed" className="ml-2 text-sm text-gray-700">
+              Mark as completed
+            </label>
           </div>
 
           {/* Buttons */}
